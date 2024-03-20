@@ -10,31 +10,32 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#include <fcntl.h>
+#include "../include/get_next_line.h"
 
-int	main(void)
+int	main(int argc, char **argv)
 {
-	int		fd1;
-	int		fd2;
-	char	*str;
-	char	*str2;
+	int		fd;
+	char	*line;
 
-	fd1 = open("test.txt", O_RDONLY);
-	fd2 = open("test2.txt", O_RDONLY);
+	if (argc != 2)
+	{
+		printf ("error : arguments not valid\n");
+		return (1);
+	}
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+	{
+		printf("file not readable or inexistant\n");
+		return (1);
+	}
+	line = 0;
 	while (1)
 	{
-		str = get_next_line(fd1);
-		str2 = get_next_line(fd2);
-		if (!str || !str2)
-		{
-			free(str);
-			free(str2);
-			return (0);
-		}
-		printf("test 1 : '%s'\n", str);
-		printf("test 2 : '%s'\n", str2);
-		free(str); free(str2);
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		printf("%s", line);
+		free(line);
 	}
 	return (0);
 }
